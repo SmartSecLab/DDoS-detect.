@@ -1,5 +1,5 @@
 """
-Author: Nikola Gavric- nikola.gavric@kristiania.no
+Author: Nikola Gavric - nikola.gavric@kristiania.no
 Created on: 06-12-2023
 Description: The script logs system and network information into log.csv every second.
 """
