@@ -1,3 +1,9 @@
+"""
+Author: Nikola Gavric (nikola.gavric@kristiania.no)
+Created on: 06-12-2023
+Description: The script logs system and network information into log.csv every second.
+"""
+
 import psutil
 import time
 import csv
@@ -86,9 +92,6 @@ def get_system_and_network_info(interval):
 			'disk_write_per_sec': disk_write_per_sec,
 			'disk_read_per_sec': disk_read_per_sec,
 			'ram_usage': {
-				'total': ram_usage.total / (1024 * 1024),
-				'used': ram_usage.used / (1024 * 1024),
-				'free': ram_usage.free / (1024 * 1024),
 				'percent': ram_usage.percent
 			}
 		}
