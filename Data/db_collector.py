@@ -1,5 +1,5 @@
 """
-Author: Nikola Gavric - nikola.gavric@kristiania.no
+Author: Nikola Gavric (nikola.gavric@kristiania.no)
 Created on: 06-12-2023
 Description: The script logs system and network information into log.csv every second.
 """
@@ -11,17 +11,17 @@ from datetime import datetime
 import os
 
 FEATURES = [
-    'Timestamp',
-    'CPU_usage',
-    'Num_processes',
-    'Interrupts_per_sec',
-    'DSK-write',
-    'DSK-read',
-    'RAM-percentage',
-    'Unique_IPs',
-    'Num_Sockets',
-    'Upload_speed',
-    'Download_speed'
+	'Timestamp',
+	'CPU_usage',
+	'Num_processes',
+	'Interrupts_per_sec',
+	'DSK-write',
+	'DSK-read',
+	'RAM-percentage',
+	'Unique_IPs',
+	'Num_Sockets',
+	'Upload_speed',
+	'Download_speed'
 ]
 
 def write_header(file_path):
@@ -40,7 +40,10 @@ def get_system_and_network_info(interval):
 
 	# Get initial interrupts count
 	interrupts_start = psutil.cpu_stats().interrupts
-
+	
+	# Get disk usage (write and read per second)
+	disk_io_counters_start = psutil.disk_io_counters()
+	
 	# Sleep for the specified interval
 	time.sleep(interval)
 
@@ -50,6 +53,13 @@ def get_system_and_network_info(interval):
 	# Calculate bytes sent and received per second
 	bytes_sent_per_sec = (net_io_counters_end.bytes_sent - net_io_counters_start.bytes_sent) / interval
 	bytes_received_per_sec = (net_io_counters_end.bytes_recv - net_io_counters_start.bytes_recv) / interval
+
+	# Get disk usage again after the interval
+	disk_io_counters_end = psutil.disk_io_counters()
+
+	# Calculate bytes written and read per second
+	disk_write_per_sec = (disk_io_counters_end.write_bytes - disk_io_counters_start.write_bytes) / interval
+	disk_read_per_sec = (disk_io_counters_end.read_bytes - disk_io_counters_start.read_bytes) / interval
 
 	# Get active connections using psutil
 	connections = psutil.net_connections(kind='inet')
@@ -66,11 +76,6 @@ def get_system_and_network_info(interval):
 
 	# Get number of running processes
 	num_processes = len(list(psutil.process_iter()))
-
-	# Get disk usage (write and read per second)
-	disk_io_counters = psutil.disk_io_counters()
-	disk_write_per_sec = disk_io_counters.write_bytes / disk_io_counters.write_time if disk_io_counters.write_time else 0
-	disk_read_per_sec = disk_io_counters.read_bytes / disk_io_counters.read_time if disk_io_counters.read_time else 0
 
 	# Get RAM memory usage
 	ram_usage = psutil.virtual_memory()
@@ -91,9 +96,7 @@ def get_system_and_network_info(interval):
 			'interrupts_per_sec': interrupts_per_sec,
 			'disk_write_per_sec': disk_write_per_sec,
 			'disk_read_per_sec': disk_read_per_sec,
-			'ram_usage': {
-				'percent': ram_usage.percent
-			}
+			'ram_usage': ram_usage.percent				 
 		}
 	}
 	
@@ -116,19 +119,18 @@ def main():
 		# Prepare data for writing to CSV
 		timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 		data = [
-            timestamp,
-            round(info['system_info']['cpu_usage'], 2),
-            info['system_info']['num_processes'],
-            info['system_info']['interrupts_per_sec'],
-            round(info['system_info']['disk_write_per_sec'], 2),
-            round(info['system_info']['disk_read_per_sec'], 2),
-            round(info['system_info']['ram_usage']['percent'], 2),
-            # Remove SWAP-related lines
-            info['network_info']['unique_ips'],
-            info['network_info']['active_sockets'],
-            round(info['network_info']['bytes_sent_per_sec'], 2),
-            round(info['network_info']['bytes_received_per_sec'], 2)
-        ]
+			timestamp,
+			round(info['system_info']['cpu_usage'], 2),
+			info['system_info']['num_processes'],
+			info['system_info']['interrupts_per_sec'],
+			round(info['system_info']['disk_write_per_sec'], 2),
+			round(info['system_info']['disk_read_per_sec'], 2),
+			round(info['system_info']['ram_usage'], 2),
+			info['network_info']['unique_ips'],
+			info['network_info']['active_sockets'],
+			round(info['network_info']['bytes_sent_per_sec'], 2),
+			round(info['network_info']['bytes_received_per_sec'], 2)
+		]
 
 		# Uncomment the following lines if you want to print the data
 		# print("Timestamp:", timestamp)
@@ -146,9 +148,6 @@ def main():
 
 		# Write to CSV
 		write_to_csv(log_file, data)
-
-		# Remove the last time.sleep() to avoid additional delay
-		# time.sleep(interval)
 
 if __name__ == "__main__":
 	main()
