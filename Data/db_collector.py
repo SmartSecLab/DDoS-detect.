@@ -126,6 +126,7 @@ def main():
 			round(info['system_info']['disk_write_per_sec'], 2),
 			round(info['system_info']['disk_read_per_sec'], 2),
 			round(info['system_info']['ram_usage'], 2),
+			# Remove SWAP-related lines
 			info['network_info']['unique_ips'],
 			info['network_info']['active_sockets'],
 			round(info['network_info']['bytes_sent_per_sec'], 2),
