@@ -20,9 +20,9 @@ df[features] = df[features].apply(lambda x: (
 feature_colors = plt.cm.tab10.colors[:len(features)]
 
 
-SMALL_SIZE = 14
-MEDIUM_SIZE = 16
-BIGGER_SIZE = 18
+SMALL_SIZE = 16
+MEDIUM_SIZE = 18
+BIGGER_SIZE = 20
 
 plt.rc('font', size=SMALL_SIZE)          # controls default text sizes
 plt.rc('xtick', labelsize=SMALL_SIZE)    # fontsize of the tick labels
@@ -69,5 +69,5 @@ plt.xticks(np.arange(len(df['Attack_Type'].unique())) + (bar_width * (len(featur
            attack_type_mapping.get(att_type.lower(), att_type.title()) for att_type in df['Attack_Type'].unique()])
 plt.xticks(rotation=45, ha='right')
 plt.tight_layout(rect=[0, 0, 1, 0.97])  # Adjust the subplot layout
-fig.savefig('figure/features_sys.png')
+fig.savefig('figure/ddos_sys.png')
 plt.show()

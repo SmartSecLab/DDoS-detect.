@@ -18,9 +18,9 @@ df[features] = np.log1p(df[features])
 # Define consistent colors for each feature
 feature_colors = plt.cm.tab10.colors[:len(features)]
 
-SMALL_SIZE = 14
-MEDIUM_SIZE = 16
-BIGGER_SIZE = 18
+SMALL_SIZE = 16
+MEDIUM_SIZE = 18
+BIGGER_SIZE = 20
 
 plt.rc('font', size=SMALL_SIZE)          # controls default text sizes
 plt.rc('xtick', labelsize=SMALL_SIZE)    # fontsize of the tick labels
@@ -58,16 +58,17 @@ for i, attack_type in enumerate(df['Attack_Type'].unique()):
                 fmt='o', color='black', markersize=8, capsize=5, label='_nolegend_')
 
 # Create a legend with consistent colors and feature labels
-ax.legend(bars, desired_feature_order, title='Features',
-          loc='upper left', bbox_to_anchor=(1, 1))
-
+# ax.legend(bars, desired_feature_order, title='Features',
+#           loc='upper left', bbox_to_anchor=(1, 1))
+ax.legend(loc='lower right')
 ax.set_ylabel('Logarithmic Scale of Feature Values')
-# ax.legend(loc=1)
+ax.legend(loc=1)
 plt.yscale('log')  # Use logarithmic scale for the Y-axis
 plt.xlabel('Traffic Type')
 plt.xticks(np.arange(len(df['Attack_Type'].unique())) + (bar_width * (len(features) - 1) / 2), [
            attack_type_mapping.get(att_type.lower(), att_type.title()) for att_type in df['Attack_Type'].unique()])
 plt.xticks(rotation=45, ha='right')
-plt.tight_layout(rect=[0, 0, 1, 0.97])  # Adjust the subplot layout
-fig.savefig('figure/features_net.png')
+# plt.tight_layout(rect=[0, 0, 1, 0.97])  # Adjust the subplot layout
+
+fig.savefig('figure/ddos_net.png')
 plt.show()
