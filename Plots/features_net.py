@@ -6,8 +6,8 @@ import numpy as np
 df = pd.read_csv("Data/labeled_db.csv", parse_dates=["Timestamp"])
 
 # Define the desired order of features within each bar group
-desired_feature_order = ['Unique_IPs',
-                         'Num_Sockets', 'Upload_speed', 'Download_speed']
+desired_feature_order = ['Unique-IPs',
+                         'Num-sockets', 'Upload-speed', 'Download-speed']
 
 # Ensure the selected features are present in the dataset
 features = [feature for feature in desired_feature_order if feature in df.columns]
@@ -28,23 +28,14 @@ plt.rc('ytick', labelsize=SMALL_SIZE)    # fontsize of the tick labels
 
 
 # Create a grouped bar chart for each feature
-fig, ax = plt.subplots(figsize=(12, 8))
+fig, ax = plt.subplots(figsize=(10, 8))
 
 bar_width = 0.15
-positions = np.arange(len(df['Attack_Type'].unique()))
-
-# Define a mapping for attack type names
-attack_type_mapping = {
-    'normal': 'Normal',
-    'syn flood': 'SYN Flood',
-    'http-get flood': 'HTTP GET Flood',
-    'TCP flood': 'TCP Flood'
-    # Add other attack types as needed
-}
+positions = np.arange(len(df['Attack-type'].unique()))
 
 # Iterate over attack types and plot each one side by side for each feature
-for i, attack_type in enumerate(df['Attack_Type'].unique()):
-    attack_data = df[df['Attack_Type'] == attack_type][features]
+for i, Attack_type in enumerate(df['Attack-type'].unique()):
+    attack_data = df[df['Attack-type'] == Attack_type][features]
 
     # Plot bars for each feature with consistent colors and desired order
     bars = ax.bar(i + np.arange(len(features)) * bar_width,
@@ -59,16 +50,15 @@ for i, attack_type in enumerate(df['Attack_Type'].unique()):
 
 # Create a legend with consistent colors and feature labels
 # ax.legend(bars, desired_feature_order, title='Features',
-#           loc='upper left', bbox_to_anchor=(1, 1))
-ax.legend(loc='lower right')
+#           loc='best', bbox_to_anchor=(1, 1))
+ax.legend(bars, desired_feature_order, title='Features', loc='upper right')
 ax.set_ylabel('Logarithmic Scale of Feature Values')
-ax.legend(loc=1)
 plt.yscale('log')  # Use logarithmic scale for the Y-axis
 plt.xlabel('Traffic Type')
-plt.xticks(np.arange(len(df['Attack_Type'].unique())) + (bar_width * (len(features) - 1) / 2), [
-           attack_type_mapping.get(att_type.lower(), att_type.title()) for att_type in df['Attack_Type'].unique()])
+plt.xticks(np.arange(len(df['Attack-type'].unique())) + (bar_width * (
+    len(features) - 1) / 2), [att_type for att_type in df['Attack-type'].unique()])
 plt.xticks(rotation=45, ha='right')
-# plt.tight_layout(rect=[0, 0, 1, 0.97])  # Adjust the subplot layout
+plt.tight_layout()  # Adjust the subplot layout
 
-fig.savefig('figure/ddos_net.png')
+fig.savefig('figure/ddos-net.png')
 plt.show()

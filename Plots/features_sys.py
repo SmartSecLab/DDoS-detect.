@@ -6,8 +6,8 @@ import numpy as np
 df = pd.read_csv("Data/labeled_db.csv", parse_dates=["Timestamp"])
 
 # Define the desired order of features within each bar group
-desired_feature_order = ['CPU_usage', 'Interrupts_per_sec',
-                         'Num_processes', 'RAM-percentage', 'DSK-write', 'DSK-read']
+desired_feature_order = ['CPU-usage', 'Interrupts-per-sec',
+                         'Num-processes', 'RAM-percentage', 'DSK-write', 'DSK-read']
 
 # Ensure the selected features are present in the dataset
 features = [feature for feature in desired_feature_order if feature in df.columns]
@@ -29,23 +29,15 @@ plt.rc('xtick', labelsize=SMALL_SIZE)    # fontsize of the tick labels
 plt.rc('ytick', labelsize=SMALL_SIZE)    # fontsize of the tick labels
 
 # Create a grouped bar chart for each feature
-fig, ax = plt.subplots(figsize=(12, 8))
+fig, ax = plt.subplots(figsize=(10, 8))
 
 bar_width = 0.15
-positions = np.arange(len(df['Attack_Type'].unique()))
+positions = np.arange(len(df['Attack-type'].unique()))
 
-# Define a mapping for attack type names
-attack_type_mapping = {
-    'normal': 'Normal',
-    'syn flood': 'SYN Flood',
-    'http-get flood': 'HTTP GET Flood',
-    'TCP flood': 'TCP Flood'
-    # Add other attack types as needed
-}
 
 # Iterate over attack types and plot each one side by side for each feature
-for i, attack_type in enumerate(df['Attack_Type'].unique()):
-    attack_data = df[df['Attack_Type'] == attack_type][features]
+for i, attack_type in enumerate(df['Attack-type'].unique()):
+    attack_data = df[df['Attack-type'] == attack_type][features]
 
     # Plot bars for each feature with consistent colors and desired order
     bars = ax.bar(i + np.arange(len(features)) * bar_width,
@@ -60,14 +52,18 @@ for i, attack_type in enumerate(df['Attack_Type'].unique()):
 
 # Create a legend with consistent colors and feature labels
 ax.legend(bars, desired_feature_order, title='Features',
-          loc='upper left', bbox_to_anchor=(1, 1))
+          loc='upper left')
 
 ax.set_ylabel('Percentage of Feature Values')
 ax.set_ylim(0, 100)  # Set Y-axis limit to 0-100%
 plt.xlabel('Traffic Type')
-plt.xticks(np.arange(len(df['Attack_Type'].unique())) + (bar_width * (len(features) - 1) / 2), [
-           attack_type_mapping.get(att_type.lower(), att_type.title()) for att_type in df['Attack_Type'].unique()])
+# plt.xticks(np.arange(len(df['Attack-type'].unique())) + (bar_width * (len(features) - 1) / 2), [
+#            attack_type_mapping.get(att_type.lower(), att_type.title()) for att_type in df['Attack-type'].unique()])
+
+plt.xticks(np.arange(len(df['Attack-type'].unique())) + (bar_width * (
+    len(features) - 1) / 2), [att_type for att_type in df['Attack-type'].unique()])
+
 plt.xticks(rotation=45, ha='right')
 plt.tight_layout(rect=[0, 0, 1, 0.97])  # Adjust the subplot layout
-fig.savefig('figure/ddos_sys.png')
+fig.savefig('figure/ddos-sys.png')
 plt.show()
