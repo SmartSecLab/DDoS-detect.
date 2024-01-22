@@ -12,16 +12,16 @@ import os
 
 FEATURES = [
 	'Timestamp',
-	'CPU_usage',
-	'Num_processes',
-	'Interrupts_per_sec',
+	'CPU-usage',
+	'Num-processes',
+	'Interrupts-per-sec',
 	'DSK-write',
 	'DSK-read',
 	'RAM-percentage',
-	'Unique_IPs',
-	'Num_Sockets',
-	'Upload_speed',
-	'Download_speed'
+	'Unique-IPs',
+	'Num-Sockets',
+	'Upload-speed',
+	'Download-speed'
 ]
 
 def write_header(file_path):
