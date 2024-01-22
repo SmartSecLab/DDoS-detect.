@@ -19,7 +19,7 @@ FEATURES = [
 	'DSK-read',
 	'RAM-percentage',
 	'Unique-IPs',
-	'Num-Sockets',
+	'Num-sockets',
 	'Upload-speed',
 	'Download-speed'
 ]
