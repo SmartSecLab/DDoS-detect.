@@ -54,7 +54,7 @@ for i, attack_type in enumerate(df['Attack-type'].unique()):
 ax.legend(bars, desired_feature_order, title='Features',
           loc='upper left')
 
-ax.set_ylabel('Percentage of Feature Values')
+ax.set_ylabel('Percentage of Max Recorded Feature Values')
 ax.set_ylim(0, 100)  # Set Y-axis limit to 0-100%
 plt.xlabel('Traffic Type')
 # plt.xticks(np.arange(len(df['Attack-type'].unique())) + (bar_width * (len(features) - 1) / 2), [
