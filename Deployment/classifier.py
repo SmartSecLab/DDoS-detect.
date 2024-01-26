@@ -10,6 +10,8 @@ from datetime import datetime
 import joblib
 import psutil
 import time
+from sklearn.preprocessing import LabelEncoder, StandardScaler
+import warnings
 
 
 FEATURES = [
@@ -101,6 +103,7 @@ def get_system_and_network_info(interval):
 			'ram_usage': ram_usage.percent				 
 		}
 	}
+
 	
 def main():
 
@@ -108,17 +111,21 @@ def main():
 
     # Load the pre-trained Random Forest model
     random_forest_model = joblib.load('random_forest_classifier.joblib')
-
+	
     print(f"\033[92m\nDDoS detection occurring every {2*interval} seconds\n" \
           f"Press Ctrl+C to exit \033[0m")
 
     # Load the LabelEncoder used during training
     label_encoder = joblib.load('label_encoder.joblib')
 	
+    # Load the trained StandardScaler
+    scaler_filename = 'standard_scaler.joblib'
+    scaler = joblib.load(scaler_filename)
+
     while True:
         info = get_system_and_network_info(interval)
 
-        # Prepare data for writing to CSV
+        # Prepare data for inference
         timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         data = [
             timestamp,
@@ -133,10 +140,14 @@ def main():
             round(info['network_info']['bytes_sent_per_sec'], 2),
             round(info['network_info']['bytes_received_per_sec'], 2)
         ]
-
-        # Feed the features into the Random Forest model for prediction
-        features_for_prediction = [data[1:]]  # Exclude the timestamp
-        prediction = random_forest_model.predict(features_for_prediction)
+		
+        features_to_scale = [data[1:]]  # Exclude the timestamp
+               
+        # Scale
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            scaled_features = scaler.transform(features_to_scale)
+            prediction = random_forest_model.predict(scaled_features)
 
         # Map the numeric label back to the original label name
         original_label = label_encoder.inverse_transform(prediction)

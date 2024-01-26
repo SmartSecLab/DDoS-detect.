@@ -32,6 +32,11 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 # Standardize features
 scaler = StandardScaler()
 X_train = scaler.fit_transform(X_train)
+
+# Save the fitted scaler for future use
+scaler_filename = 'standard_scaler.joblib'
+joblib.dump(scaler, scaler_filename)
+
 X_test = scaler.transform(X_test)
 
 # Common ML classifiers
