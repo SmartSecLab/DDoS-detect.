@@ -51,7 +51,7 @@ for i, Attack_type in enumerate(df['Attack-type'].unique()):
 # Create a legend with consistent colors and feature labels
 # ax.legend(bars, desired_feature_order, title='Features',
 #           loc='best', bbox_to_anchor=(1, 1))
-ax.legend(bars, desired_feature_order, title='Features', loc='upper right')
+ax.legend(bars, desired_feature_order, loc='upper right')
 ax.set_ylabel('Logarithmic Scale of Feature Values')
 plt.yscale('log')  # Use logarithmic scale for the Y-axis
 plt.xlabel('Traffic Type')

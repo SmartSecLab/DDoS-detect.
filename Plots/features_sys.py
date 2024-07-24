@@ -51,7 +51,7 @@ for i, attack_type in enumerate(df['Attack-type'].unique()):
                 fmt='o', color='black', markersize=8, capsize=5, label='_nolegend_')
 
 # Create a legend with consistent colors and feature labels
-ax.legend(bars, desired_feature_order, title='Features',
+ax.legend(bars, desired_feature_order,
           loc='upper left')
 
 ax.set_ylabel('Percentage of Max Recorded Feature Values')
