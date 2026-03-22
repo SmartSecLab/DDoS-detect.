@@ -1,4 +1,4 @@
-This directory contains a new and extended version of the initial dataset.
+This directory contains a new and extended version of the initial dataset (PI4DDoS).
 
 Train the model:
 
