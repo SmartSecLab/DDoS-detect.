@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-merge_attack_only_labels.py
+run_ml_train.py
 
 Merge all CSVs under a directory into ONE CSV with ONLY:
   Timestamp + 10 telemetry features + Label
